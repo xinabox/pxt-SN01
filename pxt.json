@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "description": "",
     "dependencies": {
-        "xinabox-cc03": "*"
+        "microbit": "*"
     },
     "files": [
         "README.md",
