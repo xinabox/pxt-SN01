@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "description": "",
     "dependencies": {
-        "adafruit-metro-m0-express": "*"
+        "xinabox-cc03": "*"
     },
     "files": [
         "README.md",
@@ -17,5 +17,5 @@
     "supportedTargets": [
         "maker"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
