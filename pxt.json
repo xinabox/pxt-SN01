@@ -1,7 +1,7 @@
 {
-    "name": "pxt-sn01",
-    "version": "0.0.0",
-    "description": "",
+    "name": "SN01",
+    "version": "0.0.1",
+    "description": "XinaBox SN01 GNSS: GPS data",
     "dependencies": {
         "core": "*"
     },
