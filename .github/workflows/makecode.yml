@@ -25,11 +25,11 @@ jobs:
           pxt build --cloud
         env:
           CI: true
-      - name: microbit
-        run: |
-          npm install -g pxt
-          pxt target microbit
-          pxt install
-          pxt build --cloud
-        env:
-          CI: true
+     # - name: microbit
+     #   run: |
+     #     npm install -g pxt
+     #     pxt target microbit
+     #     pxt install
+     #     pxt build --cloud
+     #   env:
+     #     CI: true
