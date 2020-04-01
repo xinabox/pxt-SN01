@@ -1,18 +1,23 @@
 {
-    "name": "SN01",
-    "version": "0.0.1",
-    "description": "XinaBox SN01 GNSS: GPS data",
-    "dependencies": {
-        "core": "*"
-    },
-    "files": [
-        "README.md",
-        "main.blocks",
-        "main.ts"
-    ],
-    "testFiles": [
-        "test.ts"
-    ],
-    "public": true,
-	"preferredEditor": "blocksprj"
+  "name": "SN01",
+  "version": "0.0.1",
+  "description": "XinaBox SN01 GNSS: GPS data",
+  "dependencies": {
+    "core": "*"
+  },
+  "files": [
+    "README.md",
+    "main.blocks",
+    "main.ts"
+  ],
+  "testFiles": [
+    "test.ts"
+  ],
+  "public": "true",
+  "preferredEditor": "blocksprj",
+  "license": "MIT",
+  "authors": [
+    "KalbeAbbas Jafferi",
+    "Bjarke Gotfredsen"
+  ]
 }
