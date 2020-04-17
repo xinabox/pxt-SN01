@@ -8,7 +8,9 @@
   "files": [
     "README.md",
     "main.blocks",
-    "main.ts"
+    "sn01.ts",
+    "parallel.cpp",
+    "parallel.h"
   ],
   "testFiles": [
     "test.ts"
