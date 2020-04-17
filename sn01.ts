@@ -42,6 +42,11 @@ namespace SN01 {
     let valid: string = ""
     let GPRMC: string[]
     let GPGGA: string[]
+    
+    while(true)
+    {
+        startParallel(parseNMEA());
+    }
 
     function poll(): number {
         let numBytes: number
@@ -140,7 +145,6 @@ namespace SN01 {
 
     //% block="SN01 get latitude %lat_format"
     export function getLat(lat_format: format): string {
-        parseNMEA()
         let latitude: number = raw_lat
         let orient: string = raw_NS
         let degrees: number = Math.trunc(latitude / 100)
@@ -166,7 +170,6 @@ namespace SN01 {
 
     //% block="SN01 get longitude %lon_format"
     export function getLon(lon_format: format): string {
-        parseNMEA()
         let longitude: number = raw_lon
         let orient: string = raw_EW
         let degrees: number = Math.trunc(longitude / 100)
@@ -192,25 +195,21 @@ namespace SN01 {
 
     //% block="SN01 get satellites number"
     export function getSat(): string {
-        parseNMEA()
         return raw_sat.toString()
     }
 
     //% block="SN01 get hdop"
     export function getHDOP(): string {
-        parseNMEA()
         return raw_hdop.toString()
     }
 
     //% block="SN01 get altitude(m)""
     export function getALT(): string {
-        parseNMEA()
         return raw_height.toString()
     }
 
     //% block="SN01 get speed %speed_sog"
     export function getSpeed(speed_sog: speed_format): string {
-        parseNMEA()
         let speed: string = ""
         let knots: number = raw_SOG
         let mph: number = knots * 1.151
@@ -231,7 +230,6 @@ namespace SN01 {
 
     //% block="SN01 get time"
     export function getTime(): string {
-        parseNMEA()
         let time_str: string = ""
         let time: number = raw_time
         let hh: number = Math.trunc(time / 10000)
@@ -245,7 +243,6 @@ namespace SN01 {
 
     //% block="SN01 get date"
     export function getDate(): string {
-        parseNMEA()
         let date_str: string = ""
         let date: number = raw_date
         let dd: number = Math.trunc(date / 10000)
@@ -256,7 +253,10 @@ namespace SN01 {
 
         return date_str
     }
-
-
-
+    
+    //% shim=parall::startParallel
+	export function startParallel(u: () => void)
+	{
+	    return 1;
+	}
 }
