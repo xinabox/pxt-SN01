@@ -43,11 +43,14 @@ namespace SN01 {
     let GPRMC: string[]
     let GPGGA: string[]
     
-    while(true)
-    {
-        startParallel(parseNMEA());
-    }
-
+        startParallel(function()
+		{
+			while(true)
+			{
+				parseNMEA()
+			}
+		})
+		
     function poll(): number {
         let numBytes: number
         pins.i2cWriteNumber(0x42, 0xFD, NumberFormat.UInt8BE)
@@ -135,7 +138,6 @@ namespace SN01 {
 
     //%block="SN01 is data valid"
     export function dataValid(): boolean {
-        parseNMEA()
         if (valid.compare("A") == 0) {
             return true
         } else {
