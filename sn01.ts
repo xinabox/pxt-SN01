@@ -211,7 +211,14 @@ namespace SN01 {
 
     //% block="SN01 get altitude(m)""
     export function getALT(): string {
-        return raw_height.toString()
+	let height: string = ""
+	
+	if(dataValid())
+	{
+	   height = raw_height.toString();
+	}
+	    
+        return height
     }
 
     //% block="SN01 get speed %speed_sog"
