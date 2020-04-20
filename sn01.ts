@@ -156,7 +156,8 @@ namespace SN01 {
         let final_lat: string = ""
 
 
-
+	if(dataValid())
+	{
         if (lat_format == format.RAW) {
             final_lat = latitude.toString() + orient
         }
@@ -166,6 +167,7 @@ namespace SN01 {
         else if (lat_format == format.DD) {
             final_lat = DD.toString() + orient
         }
+	}
 
         return final_lat
     }
@@ -181,7 +183,8 @@ namespace SN01 {
         let final_lat: string = ""
 
 
-
+	if(dataValid())
+	{
         if (lon_format == format.RAW) {
             final_lat = longitude.toString() + orient
         }
@@ -191,6 +194,7 @@ namespace SN01 {
         else if (lon_format == format.DD) {
             final_lat = DD.toString() + orient
         }
+	}
 
         return final_lat
     }
@@ -217,6 +221,8 @@ namespace SN01 {
         let mph: number = knots * 1.151
         let kph: number = knots * 1.852
 
+	if(dataValid())
+	{
         if (speed_sog == speed_format.KNOTS) {
             speed = knots.toString()
         } else if (speed_sog == speed_format.KPH) {
@@ -225,6 +231,7 @@ namespace SN01 {
         else if (speed_sog == speed_format.MPH) {
             speed = mph.toString()
         }
+	}
 
         return speed
     }
@@ -238,7 +245,10 @@ namespace SN01 {
         let mm: number = Math.trunc((time % 10000) / 100)
         let ss: number = Math.trunc(time % 100)
 
+	if(dataValid())
+	{
         time_str = hh.toString() + ":" + mm.toString() + ":" + ss.toString()
+	}
 
         return time_str
     }
@@ -251,7 +261,10 @@ namespace SN01 {
         let mm: number = Math.trunc((date % 10000) / 100)
         let yy: number = Math.trunc(date % 100)
 
+	if(dataValid())
+	{
         date_str = dd.toString() + "/" + mm.toString() + "/" + yy.toString()
+	}
 
         return date_str
     }
