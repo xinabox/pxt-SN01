@@ -153,7 +153,7 @@ namespace SN01 {
         let minutes: number = Math.trunc(latitude % 100)
         let seconds: number = ((((latitude) % 100) * 10000) % 10000) * 60 / 10000
         let DD: number = degrees + minutes / 60 + seconds / 3600
-        let final_lat: string = ""
+        let final_lat: string = "-"
 
 
 	if(dataValid())
@@ -180,7 +180,7 @@ namespace SN01 {
         let minutes: number = Math.trunc(longitude % 100)
         let seconds: number = ((((longitude) % 100) * 10000) % 10000) * 60 / 10000
         let DD: number = degrees + minutes / 60 + seconds / 3600
-        let final_lat: string = ""
+        let final_lat: string = "-"
 
 
 	if(dataValid())
@@ -211,7 +211,7 @@ namespace SN01 {
 
     //% block="SN01 get altitude(m)""
     export function getALT(): string {
-	let height: string = ""
+	let height: string = "-"
 	
 	if(dataValid())
 	{
@@ -223,7 +223,7 @@ namespace SN01 {
 
     //% block="SN01 get speed %speed_sog"
     export function getSpeed(speed_sog: speed_format): string {
-        let speed: string = ""
+        let speed: string = "-"
         let knots: number = raw_SOG
         let mph: number = knots * 1.151
         let kph: number = knots * 1.852
