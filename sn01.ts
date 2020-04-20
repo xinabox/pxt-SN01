@@ -252,10 +252,7 @@ namespace SN01 {
         let mm: number = Math.trunc((time % 10000) / 100)
         let ss: number = Math.trunc(time % 100)
 
-	if(dataValid())
-	{
         time_str = hh.toString() + ":" + mm.toString() + ":" + ss.toString()
-	}
 
         return time_str
     }
@@ -268,10 +265,7 @@ namespace SN01 {
         let mm: number = Math.trunc((date % 10000) / 100)
         let yy: number = Math.trunc(date % 100)
 
-	if(dataValid())
-	{
         date_str = dd.toString() + "/" + mm.toString() + "/" + yy.toString()
-	}
 
         return date_str
     }
