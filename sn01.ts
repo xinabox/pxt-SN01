@@ -42,7 +42,15 @@ namespace SN01 {
     let valid: string = ""
     let GPRMC: string[]
     let GPGGA: string[]
-
+    
+        startParallel(function()
+		{
+			while(true)
+			{
+				parseNMEA()
+			}
+		})
+		
     function poll(): number {
         let numBytes: number
         pins.i2cWriteNumber(0x42, 0xFD, NumberFormat.UInt8BE)
@@ -130,7 +138,6 @@ namespace SN01 {
 
     //%block="SN01 is data valid"
     export function dataValid(): boolean {
-        parseNMEA()
         if (valid.compare("A") == 0) {
             return true
         } else {
@@ -140,17 +147,17 @@ namespace SN01 {
 
     //% block="SN01 get latitude %lat_format"
     export function getLat(lat_format: format): string {
-        parseNMEA()
         let latitude: number = raw_lat
         let orient: string = raw_NS
         let degrees: number = Math.trunc(latitude / 100)
         let minutes: number = Math.trunc(latitude % 100)
         let seconds: number = ((((latitude) % 100) * 10000) % 10000) * 60 / 10000
         let DD: number = degrees + minutes / 60 + seconds / 3600
-        let final_lat: string = ""
+        let final_lat: string = "-"
 
 
-
+	if(dataValid())
+	{
         if (lat_format == format.RAW) {
             final_lat = latitude.toString() + orient
         }
@@ -160,23 +167,24 @@ namespace SN01 {
         else if (lat_format == format.DD) {
             final_lat = DD.toString() + orient
         }
+	}
 
         return final_lat
     }
 
     //% block="SN01 get longitude %lon_format"
     export function getLon(lon_format: format): string {
-        parseNMEA()
         let longitude: number = raw_lon
         let orient: string = raw_EW
         let degrees: number = Math.trunc(longitude / 100)
         let minutes: number = Math.trunc(longitude % 100)
         let seconds: number = ((((longitude) % 100) * 10000) % 10000) * 60 / 10000
         let DD: number = degrees + minutes / 60 + seconds / 3600
-        let final_lat: string = ""
+        let final_lat: string = "-"
 
 
-
+	if(dataValid())
+	{
         if (lon_format == format.RAW) {
             final_lat = longitude.toString() + orient
         }
@@ -186,36 +194,42 @@ namespace SN01 {
         else if (lon_format == format.DD) {
             final_lat = DD.toString() + orient
         }
+	}
 
         return final_lat
     }
 
     //% block="SN01 get satellites number"
     export function getSat(): string {
-        parseNMEA()
         return raw_sat.toString()
     }
 
     //% block="SN01 get hdop"
     export function getHDOP(): string {
-        parseNMEA()
         return raw_hdop.toString()
     }
 
     //% block="SN01 get altitude(m)""
     export function getALT(): string {
-        parseNMEA()
-        return raw_height.toString()
+	let height: string = "-"
+	
+	if(dataValid())
+	{
+	   height = raw_height.toString();
+	}
+	    
+        return height
     }
 
     //% block="SN01 get speed %speed_sog"
     export function getSpeed(speed_sog: speed_format): string {
-        parseNMEA()
-        let speed: string = ""
+        let speed: string = "-"
         let knots: number = raw_SOG
         let mph: number = knots * 1.151
         let kph: number = knots * 1.852
 
+	if(dataValid())
+	{
         if (speed_sog == speed_format.KNOTS) {
             speed = knots.toString()
         } else if (speed_sog == speed_format.KPH) {
@@ -224,6 +238,7 @@ namespace SN01 {
         else if (speed_sog == speed_format.MPH) {
             speed = mph.toString()
         }
+	}
 
         return speed
     }
@@ -231,7 +246,6 @@ namespace SN01 {
 
     //% block="SN01 get time"
     export function getTime(): string {
-        parseNMEA()
         let time_str: string = ""
         let time: number = raw_time
         let hh: number = Math.trunc(time / 10000)
@@ -245,7 +259,6 @@ namespace SN01 {
 
     //% block="SN01 get date"
     export function getDate(): string {
-        parseNMEA()
         let date_str: string = ""
         let date: number = raw_date
         let dd: number = Math.trunc(date / 10000)
@@ -256,7 +269,10 @@ namespace SN01 {
 
         return date_str
     }
-
-
-
+    
+    //% shim=parall::startParallel
+	export function startParallel(u: () => void)
+	{
+	    return 1;
+	}
 }
