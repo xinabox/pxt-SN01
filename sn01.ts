@@ -14,8 +14,8 @@ namespace SN01 {
     export enum orientation {
         //% block=cardinal
         cardinal = 0,
-        //% block=nocardinal
-        nocardinal = 1
+        //% block=noncardinal
+        noncardinal = 1
     }
 
     export enum speed_format {
@@ -174,7 +174,7 @@ namespace SN01 {
                     final_lat = DD.toString() + orient
                 }
             }
-        } else if (v == orientation.nocardinal) {
+        } else if (v == orientation.noncardinal) {
             if (dataValid()) {
                 if (orient == "S" || orient == "s")
                     latitude = latitude * -1
@@ -219,7 +219,7 @@ namespace SN01 {
                     final_lat = DD.toString() + orient
                 }
             }
-        } else if (v == orientation.nocardinal) {
+        } else if (v == orientation.noncardinal) {
             if (dataValid()) {
                 if (orient == "W" || orient == "w")
                     longitude = longitude * -1
