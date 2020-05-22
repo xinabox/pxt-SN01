@@ -11,6 +11,13 @@ namespace SN01 {
         DD = 2
     }
 
+    export enum orientation {
+        //% block=cardinal
+        cardinal = 0,
+        //% block=nocardinal
+        nocardinal = 1
+    }
+
     export enum speed_format {
         //% block=knots
         KNOTS = 0,
@@ -42,16 +49,14 @@ namespace SN01 {
     let valid: string = ""
     let GPRMC: string[]
     let GPGGA: string[]
-    
-        startParallel(function()
-		{
-			while(true)
-			{
-				parseNMEA()
-				basic.pause(1)
-			}
-		})
-		
+
+    startParallel(function () {
+        while (true) {
+            parseNMEA()
+            basic.pause(1)
+        }
+    })
+
     function poll(): number {
         let numBytes: number
         pins.i2cWriteNumber(0x42, 0xFD, NumberFormat.UInt8BE)
@@ -146,8 +151,8 @@ namespace SN01 {
         }
     }
 
-    //% block="SN01 get latitude %lat_format"
-    export function getLat(lat_format: format): string {
+    //% block="SN01 get latitude %lat_format, %v"
+    export function getLat(lat_format: format, v: orientation): string {
         let latitude: number = raw_lat
         let orient: string = raw_NS
         let degrees: number = Math.trunc(latitude / 100)
@@ -157,24 +162,43 @@ namespace SN01 {
         let final_lat: string = "-"
 
 
-	if(dataValid())
-	{
-        if (lat_format == format.RAW) {
-            final_lat = latitude.toString() + orient
+        if (v == orientation.cardinal) {
+            if (dataValid()) {
+                if (lat_format == format.RAW) {
+                    final_lat = latitude.toString() + orient
+                }
+                else if (lat_format == format.DMS) {
+                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
+                }
+                else if (lat_format == format.DD) {
+                    final_lat = DD.toString() + orient
+                }
+            }
+        } else if (v == orientation.nocardinal) {
+            if (dataValid()) {
+                if (orient == "S" || orient == "s")
+                    latitude = latitude * -1
+                if (lat_format == format.RAW) {
+                    final_lat = latitude.toString()
+                }
+                else if (lat_format == format.DMS) {
+                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\""
+
+                    if (latitude > 0)
+                        final_lat = "-" + final_lat
+                }
+                else if (lat_format == format.DD) {
+                    DD = latitude > 0 ? DD : DD * -1
+                    final_lat = DD.toString()
+                }
+            }
         }
-        else if (lat_format == format.DMS) {
-            final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
-        }
-        else if (lat_format == format.DD) {
-            final_lat = DD.toString() + orient
-        }
-	}
 
         return final_lat
     }
 
-    //% block="SN01 get longitude %lon_format"
-    export function getLon(lon_format: format): string {
+    //% block="SN01 get longitude %lon_format, %v"
+    export function getLon(lon_format: format, v: orientation): string {
         let longitude: number = raw_lon
         let orient: string = raw_EW
         let degrees: number = Math.trunc(longitude / 100)
@@ -183,19 +207,37 @@ namespace SN01 {
         let DD: number = degrees + minutes / 60 + seconds / 3600
         let final_lat: string = "-"
 
+        if (v == orientation.cardinal) {
+            if (dataValid()) {
+                if (lon_format == format.RAW) {
+                    final_lat = longitude.toString() + orient
+                }
+                else if (lon_format == format.DMS) {
+                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
+                }
+                else if (lon_format == format.DD) {
+                    final_lat = DD.toString() + orient
+                }
+            }
+        } else if (v == orientation.nocardinal) {
+            if (dataValid()) {
+                if (orient == "W" || orient == "w")
+                    longitude = longitude * -1
+                if (lon_format == format.RAW) {
+                    final_lat = longitude.toString()
+                }
+                else if (lon_format == format.DMS) {
+                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\""
 
-	if(dataValid())
-	{
-        if (lon_format == format.RAW) {
-            final_lat = longitude.toString() + orient
+                    if (longitude > 0)
+                        final_lat = "-" + final_lat
+                }
+                else if (lon_format == format.DD) {
+                    DD = longitude > 0 ? DD : DD * -1
+                    final_lat = DD.toString()
+                }
+            }
         }
-        else if (lon_format == format.DMS) {
-            final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
-        }
-        else if (lon_format == format.DD) {
-            final_lat = DD.toString() + orient
-        }
-	}
 
         return final_lat
     }
@@ -212,13 +254,12 @@ namespace SN01 {
 
     //% block="SN01 get altitude(m)""
     export function getALT(): string {
-	let height: string = "-"
-	
-	if(dataValid())
-	{
-	   height = raw_height.toString();
-	}
-	    
+        let height: string = "-"
+
+        if (dataValid()) {
+            height = raw_height.toString();
+        }
+
         return height
     }
 
@@ -229,17 +270,16 @@ namespace SN01 {
         let mph: number = knots * 1.151
         let kph: number = knots * 1.852
 
-	if(dataValid())
-	{
-        if (speed_sog == speed_format.KNOTS) {
-            speed = knots.toString()
-        } else if (speed_sog == speed_format.KPH) {
-            speed = kph.toString()
+        if (dataValid()) {
+            if (speed_sog == speed_format.KNOTS) {
+                speed = knots.toString()
+            } else if (speed_sog == speed_format.KPH) {
+                speed = kph.toString()
+            }
+            else if (speed_sog == speed_format.MPH) {
+                speed = mph.toString()
+            }
         }
-        else if (speed_sog == speed_format.MPH) {
-            speed = mph.toString()
-        }
-	}
 
         return speed
     }
@@ -270,10 +310,9 @@ namespace SN01 {
 
         return date_str
     }
-    
+
     //% shim=parall::startParallel
-	export function startParallel(u: () => void)
-	{
-	    return 1;
-	}
+    export function startParallel(u: () => void) {
+        return 1;
+    }
 }
