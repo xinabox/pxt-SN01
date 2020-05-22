@@ -5,10 +5,8 @@ namespace SN01 {
     export enum format {
         //% block=raw
         RAW = 0,
-        //% block=DMS
-        DMS = 1,
         //%block=DD
-        DD = 2
+        DD = 1
     }
 
     export enum orientation {
@@ -151,8 +149,8 @@ namespace SN01 {
         }
     }
 
-    //% block="SN01 get latitude %lat_format, %v"
-    export function getLat(lat_format: format, v: orientation): string {
+    //% block="SN01 get latitude DMS"
+    export function getLatDMS(): string {
         let latitude: number = raw_lat
         let orient: string = raw_NS
         let degrees: number = Math.trunc(latitude / 100)
@@ -161,73 +159,80 @@ namespace SN01 {
         let DD: number = degrees + minutes / 60 + seconds / 3600
         let final_lat: string = "-"
 
-
-        if (v == orientation.cardinal) {
-            if (dataValid()) {
-                if (lat_format == format.RAW) {
-                    final_lat = latitude.toString() + orient
-                }
-                else if (lat_format == format.DMS) {
-                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
-                }
-                else if (lat_format == format.DD) {
-                    final_lat = DD.toString() + orient
-                }
-            }
-        } else if (v == orientation.noncardinal) {
-            if (dataValid()) {
-                if (orient == "S" || orient == "s")
-                    latitude = latitude * -1
-                if (lat_format == format.RAW) {
-                    final_lat = latitude.toString()
-                }
-                else if (lat_format == format.DD) {
-                    DD = latitude > 0 ? DD : DD * -1
-                    final_lat = DD.toString()
-                }
-            }
+        if (dataValid()) {
+            final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
         }
 
         return final_lat
     }
 
-    //% block="SN01 get longitude %lon_format, %v"
-    export function getLon(lon_format: format, v: orientation): string {
+    //% block="SN01 get longitude DMS"
+    export function getLonDMS(): string {
         let longitude: number = raw_lon
         let orient: string = raw_EW
         let degrees: number = Math.trunc(longitude / 100)
         let minutes: number = Math.trunc(longitude % 100)
         let seconds: number = ((((longitude) % 100) * 10000) % 10000) * 60 / 10000
         let DD: number = degrees + minutes / 60 + seconds / 3600
+        let final_lon: string = "-"
+
+        if (dataValid()) {
+            final_lon = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
+
+        }
+
+        return final_lon
+    }
+
+    //% block="SN01 get latitude %lat_format"
+    export function getLat(lat_format: format): string {
+        let latitude: number = raw_lat
+        let orient: string = raw_NS
+        let degrees: number = Math.trunc(latitude / 100)
+        let minutes: number = Math.trunc(latitude % 100)
+        let seconds: number = ((((latitude) % 100) * 10000) % 10000) * 60 / 10000
+        let DD: number = degrees + minutes / 60 + seconds / 3600
         let final_lat: string = "-"
 
-        if (v == orientation.cardinal) {
-            if (dataValid()) {
-                if (lon_format == format.RAW) {
-                    final_lat = longitude.toString() + orient
-                }
-                else if (lon_format == format.DMS) {
-                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\"" + orient
-                }
-                else if (lon_format == format.DD) {
-                    final_lat = DD.toString() + orient
-                }
+        if (dataValid()) {
+            if (orient == "S" || orient == "s")
+                latitude = latitude * -1
+            if (lat_format == format.RAW) {
+                final_lat = latitude.toString()
             }
-        } else if (v == orientation.noncardinal) {
-            if (dataValid()) {
-                if (orient == "W" || orient == "w")
-                    longitude = longitude * -1
-                if (lon_format == format.RAW) {
-                    final_lat = longitude.toString()
-                }
-                else if (lon_format == format.DD) {
-                    DD = longitude > 0 ? DD : DD * -1
-                    final_lat = DD.toString()
-                }
+            else if (lat_format == format.DD) {
+                DD = latitude > 0 ? DD : DD * -1
+                final_lat = DD.toString()
             }
         }
 
         return final_lat
+    }
+
+    //% block="SN01 get longitude %lng_format"
+    export function getLon(lon_format: format): string {
+        let longitude: number = raw_lon
+        let orient: string = raw_EW
+        let degrees: number = Math.trunc(longitude / 100)
+        let minutes: number = Math.trunc(longitude % 100)
+        let seconds: number = ((((longitude) % 100) * 10000) % 10000) * 60 / 10000
+        let DD: number = degrees + minutes / 60 + seconds / 3600
+        let final_lon: string = "-"
+
+
+        if (dataValid()) {
+            if (orient == "W" || orient == "w")
+                longitude = longitude * -1
+            if (lon_format == format.RAW) {
+                final_lon = longitude.toString()
+            }
+            else if (lon_format == format.DD) {
+                DD = longitude > 0 ? DD : DD * -1
+                final_lon = DD.toString()
+            }
+        }
+
+        return final_lon
     }
 
     //% block="SN01 get satellites number"
