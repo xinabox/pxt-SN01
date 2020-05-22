@@ -181,12 +181,6 @@ namespace SN01 {
                 if (lat_format == format.RAW) {
                     final_lat = latitude.toString()
                 }
-                else if (lat_format == format.DMS) {
-                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\""
-
-                    if (latitude > 0)
-                        final_lat = "-" + final_lat
-                }
                 else if (lat_format == format.DD) {
                     DD = latitude > 0 ? DD : DD * -1
                     final_lat = DD.toString()
@@ -225,12 +219,6 @@ namespace SN01 {
                     longitude = longitude * -1
                 if (lon_format == format.RAW) {
                     final_lat = longitude.toString()
-                }
-                else if (lon_format == format.DMS) {
-                    final_lat = degrees.toString() + "d" + minutes.toString() + "\'" + seconds.toString() + "\""
-
-                    if (longitude > 0)
-                        final_lat = "-" + final_lat
                 }
                 else if (lon_format == format.DD) {
                     DD = longitude > 0 ? DD : DD * -1
